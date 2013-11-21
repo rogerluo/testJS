@@ -85,7 +85,7 @@
 
 
 
-<ul class="pagination pagination-lg">
+<!--<ul class="pagination pagination-lg">
   <li class="disabled"><a href="#">&laquo;</a></li>
   <li class="active"><a href="#">1</a></li>
   <li><a href="#">2</a></li>
@@ -93,193 +93,34 @@
   <li><a href="#">4</a></li>
   <li><a href="#">5</a></li>
   <li><a href="#">&raquo;</a></li>
-</ul>
+</ul>-->
 
 
 
-<table class="table table-bordered">
+<table class="table table-bordered" id="serverlist">
         <thead>
           <tr><!--style="background-color:#DDBB44; color:#FFFFFF">-->
-            <th class="col-lg-1">Product</th>
+<!--             
+			<th class="col-lg-1">Product</th>
             <th class="col-lg-2">Server Name</th>
             <th class="col-lg-1">Type</th>
             <th class="col-lg-2">OS</th>
             <th class="col-lg-1">SMF</th>
             <th class="col-lg-2">APP</th>
             <th class="col-lg-1">Manifest</th>
-            <th class="col-lg-1">Label</th>
+            <th class="col-lg-1">Label</th> 
+-->
+			<th class="col-lg-1">Product</th>
+			<th class="col-lg-1">Region</th>
+            <th class="col-lg-2">Server Name</th>
+            <th class="col-lg-2">Host IP</th>
+			<th class="col-lg-1">User</th>
+			<th class="col-lg-1">Password</th>
+			<th class="col-lg-2">Create On</th>
+			<th class="col-lg-2">Update On</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>MCU</td>
-	    <td>MPLD-DDNMMCA01A</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.5</td>
-            <td>1.7.1</td>
-            <td>1.96</td>
-            <td>-</td>
-          </tr>
-
-	  <tr>
-            <td>MCU</td>
-	    <td>MPLD-DDNMMCA01B</td>
-	    <td>G6 Blade</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>-</td>
-   	  </tr>
-
-          <tr>
-            <td>MCU</td>
-	    <td>MPLD-DDNMMCA02A</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.5</td>
-            <td>1.7.1</td>
-            <td>1.96</td>
-            <td>-</td>
-          </tr>
-
-	  <tr>
-            <td>ARB</td>
-	    <td>MPLD-DDNMARB01A</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.5</td>
-            <td>1.06.04-PCN003-PCN004</td>
-            <td>2.19</td>
-            <td>1.15</td>
-          </tr>
-
-	  <tr>
-            <td>ARB</td>
-	    <td>MPLD-DDNMARB01B</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.5</td>
-            <td>1.06.04-PCN003-PCN004</td>
-            <td>2.19</td>
-            <td>1.15</td>
-          </tr>
-
-
-	  <tr>
-            <td>ESS</td>
-	    <td>MPLD-DDNMISS01A</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.5</td>
-            <td>1.05.20</td>
-            <td>2.01</td>
-            <td>-</td>
-    	  </tr>
-
-
-	  <tr>
-            <td>ESS</td>
-	    <td>MPLD-DDNMISS01B</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.5</td>
-            <td>1.05.20</td>
-            <td>2.01</td>
-            <td>-</td>
-    	  </tr>
-
-
-	  <tr>
-            <td>ESC</td>
-	    <td>MPLD-DDNMISC01A</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.5</td>
-            <td>1.05.11</td>
-            <td>2.01</td>
-            <td>-</td>
-    	  </tr>
-
-	  <tr>
-            <td>ESC</td>
-	    <td>MPLD-DDNMISC01B</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.5</td>
-            <td>1.05.11</td>
-            <td>2.01</td>
-            <td>-</td>
-          </tr>
-
-	  <tr>
-            <td>ITDG</td>
-	    <td>MPLD-DDNMIDG01A</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.00</td>
-            <td>1.0.0</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
-
-	  <tr>
-	    <td>ITDG</td>
-	    <td>MPLD-DDNMIDG01B</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.00</td>
-            <td>1.0.0</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
-
-	  <tr>
-	    <td>ADH</td>
-	    <td>MPLD-DDNMSRC01A</td>
-	    <td>G6 Blade</td>
-            <td>SunOS 5.10 Generic_142910-17</td>
-            <td>1.2</td>
-            <td>ssl6.6.2.F18</td>
-            <td>-</td>
-            <td>1.15</td>
-    	  </tr>
-
-	  <tr>
-	    <td>EED</td>
-	    <td>MPLD-DDNMEED01A</td>
-	    <td>G6 Blade</td>
-            <td>Windows 2008 SP2</td>
-            <td>1.5</td>
-            <td>2.2.0B3</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
-
-
-	  <tr>
-	    <td>VAH</td>
-	    <td>MPLD-DDNMVAH01A</td>
-	    <td>G7 Blade</td>
-            <td>Windows 2008 R2</td>
-            <td>1.5</td>
-            <td>1.5.0.17990</td>
-            <td>2.45</td>
-            <td>1.15</td>
-          </tr>
-
-	  <tr>
-	    <td>VAH</td>
-	    <td>MPLD-DDNMVAH01B</td>
-	    <td>G7 Blade</td>
-            <td>Windows 2008 R2</td>
-            <td>1.5</td>
-            <td>1.5.0.17990</td>
-            <td>2.45</td>
-            <td>1.15</td>
-          </tr>
-	  
         </tbody>
       </table>
 
@@ -302,6 +143,26 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <!--    <script src="js/jquery-1.10.2.js"></script>
     <script src="js/bootstrap.js"></script>-->
+    <?
+        $conn = mysql_connect("10.35.12.53", "root", "intel@123");
+	    if (!$conn)
+	    {
+		    die('Could not connect: ' . mysql_error());
+	    }
+	    // todo
+	
+	    mysql_select_db("checkit", $conn);
+	    $sql = "SELECT * FROM Host";
+	    $rs = mysql_query($sql, $conn);                     
+	    if(!$rs){die('Could not execute query: ' . mysql_error());} 
+	    echo "<table>"; 
+	    echo "<tr><td>Host</td><td>Ip</td><td>Username</td></tr>"; 
+	    while($row = mysql_fetch_row($rs)) 
+		    echo "<tr><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>";   
+	    echo "</table>";  
+	    echo "access mysql successfully";
+	    mysql_close($conn);
+    ?>
     <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.2/js/bootstrap.min.js"></script>
     <script src="http://cdn.bootcss.com/holder/2.0/holder.min.js"></script>
