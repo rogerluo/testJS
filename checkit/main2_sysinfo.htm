@@ -96,6 +96,40 @@
 </ul>-->
 
 
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Filter</h3>
+  </div>
+  <div class="panel-body">
+	<div style="height:30px">
+    <div class="col-md-3">
+		Product:
+	</div>
+	<div class="col-md-9"  role="main">
+		
+
+		<div class="btn-group">
+		  <button type="button" class="btn btn-default">Left</button>
+		  <button type="button" class="btn btn-default">Middle</button>
+		  <button type="button" class="btn btn-default">Right</button>
+		</div>
+
+
+	</div>
+	</div>
+	<div style="height:30px">
+    <div class="col-md-3">
+		Region:
+	</div>
+	<div class="col-md-9"  role="main">
+		main2
+	</div>
+	</div>
+  </div>
+</div>
+
+
+
 
 <table class="table table-bordered" id="serverlist">
         <thead>
@@ -155,6 +189,8 @@
             $("#search").click(function () {
                 GetDefaultHostList();
             });
+			
+			
         });
 
         function GetDefaultHostList() {
@@ -165,7 +201,8 @@
                 //    $("#serverlist tbody").append("<tr><td>" + data[i][0] + "</td><td>" + data[i][1] + "</td><td>" + data[i][2] + "</td><td>" + data[i][3] + "</td><td>" + data[i][4] + "</td><td>" + data[i][5] + "</td><td>" + data[i][6] + "</td><td>" + data[i][7] + "</td></tr>");
                 //}
 				$allhosts = data;
-                $(eval($allhosts)).each(function (index) {
+				var dataObj=eval("("+data+")");
+                $(eval(dataObj["host"])).each(function (index) {
 					if (index % 2 == 0)
 						$("#serverlist tbody").append("<tr style='background-color:#ccc'><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
 					else
@@ -173,6 +210,7 @@
                 });
             });
         }
+		
     </script>
 </body>
 </html>

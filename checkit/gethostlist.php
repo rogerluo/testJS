@@ -44,9 +44,10 @@
 		}
 		// get region list
 		$allregionsql = "select distinct Name from Region";
-		$rs = mysql_query($allhostsql, $conn);
+		$rs = mysql_query($allregionsql, $conn);
 		$regions = array();
-		if (!rs) $result = '<tr><td colspan=8>Could not execute query:' . mysql_error() .'</td></tr>';
+		$regionsresult = "";
+		if (!rs) $regionsresult = '<tr><td colspan=8>Could not execute query:' . mysql_error() .'</td></tr>';
 		else {
 			if (mysql_num_rows($rs) > 0){
 				while($row = mysql_fetch_row($rs)) {
@@ -63,7 +64,7 @@
 
 			}
 		}
-		$result = json_encode((object)Array('host'=>$hosts, 'region'=>$regions));
+		$result = json_encode((object)Array('host'=>json_encode($hosts), 'region'=>json_encode($regions)));
 		// $result = "{
 			// 'host':".json_encode($hosts).",
 			// 'region':".json_encode($regions)."
