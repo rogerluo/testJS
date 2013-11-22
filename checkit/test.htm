@@ -7,7 +7,7 @@
 	// todo
 	
 	mysql_select_db("checkit", $conn);
-	$sql = "SELECT * FROM Host";
+	$sql = "select c.name as Product, r.Name as Region, h.Name as ServerName, h.IP, h.User, h.Password, h.CreateDate, h.UPdatedate from Host h join Component c on h.componentid = c.id join Region r on h.regionid = r.id";
 	$rs = mysql_query($sql, $conn);                     
 	if(!$rs){die('Could not execute query: ' . mysql_error());} 
 	echo "<table>"; 

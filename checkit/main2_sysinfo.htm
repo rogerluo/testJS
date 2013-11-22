@@ -123,13 +123,13 @@
         <tbody>
         </tbody>
       </table>
-
+        
 <!--
 <ul class="pager">
   <li><a href="#">Previous</a></li>
   <li><a href="#">Next</a></li>
 </ul>-->
-
+<button type="button" class="btn btn-primary" id="search">Seach</button>
 
             </div>
         </div>
@@ -143,34 +143,36 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <!--    <script src="js/jquery-1.10.2.js"></script>
     <script src="js/bootstrap.js"></script>-->
-    <?
-        $conn = mysql_connect("10.35.12.53", "root", "intel@123");
-	    if (!$conn)
-	    {
-		    die('Could not connect: ' . mysql_error());
-	    }
-	    // todo
-	
-	    mysql_select_db("checkit", $conn);
-	    $sql = "SELECT * FROM Host";
-	    $rs = mysql_query($sql, $conn);                     
-	    if(!$rs){die('Could not execute query: ' . mysql_error());} 
-	    echo "<table>"; 
-	    echo "<tr><td>Host</td><td>Ip</td><td>Username</td></tr>"; 
-	    while($row = mysql_fetch_row($rs)) 
-		    echo "<tr><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>";   
-	    echo "</table>";  
-	    echo "access mysql successfully";
-	    mysql_close($conn);
-    ?>
+ <!--    -->
     <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.2/js/bootstrap.min.js"></script>
     <script src="http://cdn.bootcss.com/holder/2.0/holder.min.js"></script>
     <script src="http://cdn.bootcss.com/highlight.js/7.3/highlight.min.js"></script>
     <script type="text/javascript">
+		var $allhosts;
         $(document).ready(function () {
             $("tbody tr:odd").css("background-color", "#ccc");
+            $("#search").click(function () {
+                GetDefaultHostList();
+            });
         });
+
+        function GetDefaultHostList() {
+            $("#serverlist tbody").html("");
+            $.post("./gethostlist.php", null, function (data) {
+                //$("#serverlist tbody").html(data);
+                //for (var i = 0; i < data.length; i++) {
+                //    $("#serverlist tbody").append("<tr><td>" + data[i][0] + "</td><td>" + data[i][1] + "</td><td>" + data[i][2] + "</td><td>" + data[i][3] + "</td><td>" + data[i][4] + "</td><td>" + data[i][5] + "</td><td>" + data[i][6] + "</td><td>" + data[i][7] + "</td></tr>");
+                //}
+				$allhosts = data;
+                $(eval($allhosts)).each(function (index) {
+					if (index % 2 == 0)
+						$("#serverlist tbody").append("<tr style='background-color:#ccc'><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
+					else
+						$("#serverlist tbody").append("<tr><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
+                });
+            });
+        }
     </script>
 </body>
 </html>
