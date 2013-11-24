@@ -46,6 +46,22 @@
                 height: 20px;
             }
 
+            .a-value > .a-element + .v-select {
+                width: 120px;
+                float: left;
+                display: block;
+                overflow: hidden;
+                padding-top: 5px;
+                height: 20px;
+            border-top-color: #f00;
+            border-top-style: solid;
+            border-top-width: 1px;
+        }
+        .font-selected {
+            font-weight:bold;
+            color:#f00;
+        }
+
             .a-value > .a-option {
                 position: absolute;
                 right: 10px;
@@ -83,11 +99,7 @@
             font-weight: bold;
         }
 
-        .select {
-            border-top-color: rgb(153, 153, 153);
-            border-top-style: solid;
-            border-top-width: 1px;
-        }
+        
     </style>
 </head>
 <body>
@@ -127,7 +139,7 @@
                         </h3>
                     </div>
                     <!-- selected filter -->
-                    <div class="panel-body" style="display:none">
+                    <div id="selected" class="panel-body" style="display:none">
                         <div>
                             <div class="a-key">Selected:</div>
                             <div id="Div1" class="a-value">
@@ -212,8 +224,15 @@
     <script type="text/javascript">
         var allhosts, allregions, allproducts;
         var init_disp_product = 12, init_disp_region = 4;
-        
+        var selected = new Object();
         $(document).ready(function () {
+            // init selected object
+            selected.IsMultiChoise4Product = false;
+            selected.IsMultiChoise4Region = false;
+            selected.Products = new Array();
+            selected.Regions = new Array();
+            selected.OrderBy = "";
+
             // retrieve hosts, regions, products
             $.post("./gethostlist.php", null, function (data) {
                 var dataObj = eval("(" + data + ")");
@@ -288,14 +307,29 @@
 
             $("#regionlist").delegate(".a-element a", "click", function (data) {
                 //event.returnValue = false;
-                //event.preventDefault();
-                $.post("./searchhost.php", { region: this.innerText }, RenderHost);
+                event.preventDefault();
+                if (selected.IsMultiChoise4Region) return;
+                selected.Regions[0] = this.innerText;
+                SearchHost();
             });
 
             $("#productlist").delegate(".a-element a", "click", function (data) {
                 //event.returnValue = false;
-                //event.preventDefault();
-                $.post("./searchhost.php", { product: this.innerText }, RenderHost);
+                event.preventDefault();
+                if (selected.IsMultiChoise4Product) return;
+                selected.Products[0] = this.innerText;
+                SearchHost();
+            });
+
+            $("#selected").delegate("a span", "click", function (data) {
+                event.preventDefault();
+                if ($(this).attr("attr").toLowerCase() == "product") {
+                    selected.Products = [];
+                }
+                else if ($(this).attr("attr").toLocaleLowerCase() == "region") {
+                    selected.Regions = [];
+                }
+                SearchHost();
             });
 
 
@@ -329,8 +363,39 @@
                 });
             });
         }
+
+        function SearchHost() {
+            $.post("./searchhost.php", { region: selected.Regions.join("|"), product: selected.Products.join("|") }, RenderHost);
+        }
+
         function RenderHost(data) {
+            if (selected.Products.length > 0 ||
+                selected.Regions.length > 0) {
+                $("#selected").css("display", "block");
+                $("#selected .a-value").html("");
+                if (selected.Products.length > 0) {
+                    var innerHtml = "<div class='v-element v-selected'>Product:";
+                    for (var i = 0; i < selected.Products.length - 1; i++) {
+                        innerHtml += "<span class='font-selected'>"+selected.Products[i]+",</span>";
+                    }
+                    innerHtml += selected.Products[selected.Products.length - 1] + "<a href=#><span class='glyphicon glyphicon-remove' attr='product'></span></a></div>";
+                    $("#selected .a-value").append(innerHtml);
+                }
+
+                if (selected.Regions.length > 0) {
+                    var innerHtml = "<div class='v-element v-selected'>Region:";
+                    for (var i = 0; i < selected.Regions.length - 1; i++) {
+                        innerHtml += "<span class='font-selected'>" + selected.Products[i] + ",</span>";
+                    }
+                    innerHtml += selected.Regions[selected.Regions.length - 1] + "<a href=#><span class='glyphicon glyphicon-remove' attr='region'></span></a></div>";
+                    $("#selected .a-value").append(innerHtml);
+                }
+            }
+            else
+                $("#selected").css("display", "none");
+
             $("#serverlist tbody").html("");
+            
             $(eval(data)).each(function (index) {
                 if (index % 2 == 0)
                     $("#serverlist tbody").append("<tr style='background-color:#ccc'><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");

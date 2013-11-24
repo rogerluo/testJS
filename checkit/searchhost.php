@@ -42,7 +42,8 @@
 				}
 			}
 			else {
-				$hostresult = '<tr><td colspan=8>Nothing Matches</td></tr>';
+				//$hostresult = '<tr><td colspan=8>Nothing Matches</td></tr>';
+				$hosts[] = Array(0=>"", 1=>"", 2=>"", 3=>"", 4=>"", 5=>"", 6=>"", 7=>"", 8=>"");
 			}
 		}
 		$result = json_encode((isset($hostresult) && !empty($hostresult)) ? $hostresult : $hosts);
