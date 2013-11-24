@@ -12,21 +12,88 @@
     <link href="css/bootstrap-theme.css" rel="stylesheet" />
     <link href="css/bootstrap.css" rel="stylesheet" />
     <link href="css/justified-nav.css" rel="stylesheet" />
-    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+
     <style type="text/css">
-        
+        .panel > .panel-body + .panel-body {
+            border-top: 1px solid #DDDDDD;
+        }
+
+        .a-key {
+            width: 100px;
+            text-align: right;
+            float: left;
+            line-height: 25px;
+            font-weight: bold;
+            padding-right: 10px;
+            display: block;
+        }
+
+        .a-value {
+            width: 620px;
+            display: block;
+            float: left;
+            position: relative;
+            padding-right: 120px;
+            zoom: 1;
+        }
+
+            .a-value > .a-element {
+                width: 120px;
+                float: left;
+                display: block;
+                overflow: hidden;
+                padding-top: 5px;
+                height: 20px;
+            }
+
+            .a-value > .a-option {
+                position: absolute;
+                right: 10px;
+                top: 0px;
+                width: 140px;
+                height: 20px;
+                padding-top: 2px;
+            }
+
+        .o-more {
+            float: left;
+            position: relative;
+            width: 70px;
+            height: 20px;
+            padding-right: 14px;
+            line-height: 20px;
+            text-align: left;
+            text-decoration: none;
+            cursor: pointer;
+            color: #005AA0;
+            font-weight: bold;
+        }
+
+
+        .o-multiple {
+            position: relative;
+            float: right;
+            width: 70px;
+            height: 20px;
+            text-align: right;
+            padding-left: 5px;
+            line-height: 20px;
+            cursor: pointer;
+            color: #005AA0;
+            font-weight: bold;
+        }
+
+        .select {
+            border-top-color: rgb(153, 153, 153);
+            border-top-style: solid;
+            border-top-width: 1px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="masthead">
-            <h3 class="text-muted">
-                CheckIT!</h3>
+            <h3 class="text-muted">CheckIT!</h3>
             <ul class="nav nav-justified">
                 <li class="active"><a href="./index.htm">Home</a></li>
                 <li><a href="#">DIT</a></li>
@@ -41,158 +108,210 @@
         <!-- Example row of columns -->
         <div class="row">
             <div class="col-md-3">
-                
-
-<ul class="nav nav-pills nav-stacked">
-   <li class="active"><a href="#">System Information</a> </li>
-    <li><a href="#">Data</a> </li>
-     <ul class="nav nav-pills nav-stacked">
-        <li><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;RIC Check</a> </li>
-        <li><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;DCS Check</a> </li>
-     </ul>
-     <li><a href="#">Log Check</a> </li>
-</ul>
-
-
-<!--                <div class="nav side-menu">
-                    <div>
-                        <ul class="menu-first" style="display: block;">
-                            <li><a href="#">System Information</a> </li>
-                            <li><a href="#">Function</a>
-                                <ul class="menu-second" style="display:none;">
-                                    <li><a href="#">RIC Check</a> </li>
-                                    <li><a href="#">DTS Check</a> </li>
-                                </ul>
-                            </li>
-                            <li><a href="#">Log Check</a> </li>
-                        </ul>
-                    </div>
-                </div>-->
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active"><a href="#">System Information</a> </li>
+                    <li><a href="#">Data</a> </li>
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;RIC Check</a> </li>
+                        <li><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;DCS Check</a> </li>
+                    </ul>
+                    <li><a href="#">Log Check</a> </li>
+                </ul>
             </div>
             <div class="col-md-9" role="main">
-                
-<!--
-<ul class="pagination pagination-lg">
-  <li class="disabled"><a href="#">&laquo;</a></li>
-  <li class="active"><a href="#">1</a></li>
-  <li><a href="#">2</a></li>
-  <li><a href="#">3</a></li>
-  <li><a href="#">4</a></li>
-  <li><a href="#">5</a></li>
-  <li><a href="#">&raquo;</a></li>
-</ul>
--->
+                <!-- Product List -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Filter&nbsp;
+                            <span class="glyphicon glyphicon-search"></span>
+                        </h3>
+                    </div>
+                    <!-- selected filter -->
+                    <div class="panel-body" style="display:none">
+                        <div>
+                            <div class="a-key">Selected:</div>
+                            <div id="Div1" class="a-value">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- product filter -->
+                    <div class="panel-body">
+                        <div>
+                            <div class="a-key">Product:</div>
+                            <div id="productlist" class="a-value">
+                                <div class='a-option'>
+                                    <div class="o-more">
+                                        More<span class="glyphicon glyphicon-chevron-down"></span>
+                                    </div>
+                                    <div class="o-multiple">Multi&nbsp;<span class="glyphicon glyphicon-plus-sign"></span></div>
+                                </div>
+                            </div>
+                        </div>
 
+                    </div>
+                    <!-- region filter -->
+                    <div class="panel-body">
+                        <div>
+                            <div class="a-key">Region:</div>
+                            <div id="regionlist" class="a-value">
+                                <div class='a-option'>
+                                    <div class="o-more">
+                                        More<span class="glyphicon glyphicon-chevron-down"></span>
+                                    </div>
+                                    <div class="o-multiple">Multi&nbsp;<span class="glyphicon glyphicon-plus-sign"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Region List -->
 
+                <!-- Host List -->
+                <table class="table table-bordered" id="serverlist">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-1">Product</th>
+                            <th class="col-lg-1">Region</th>
+                            <th class="col-lg-2">Server Name</th>
+                            <th class="col-lg-2">Host IP</th>
+                            <th class="col-lg-1">User</th>
+                            <th class="col-lg-1">Password</th>
+                            <th class="col-lg-2">Create On</th>
+                            <th class="col-lg-2">Update On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
 
-<!--<ul class="pagination pagination-lg">
-  <li class="disabled"><a href="#">&laquo;</a></li>
-  <li class="active"><a href="#">1</a></li>
-  <li><a href="#">2</a></li>
-  <li><a href="#">3</a></li>
-  <li><a href="#">4</a></li>
-  <li><a href="#">5</a></li>
-  <li><a href="#">&raquo;</a></li>
-</ul>-->
-
-
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Filter</h3>
-  </div>
-  <div class="panel-body">
-	<div style="height:30px">
-    <div class="col-md-3">
-		Product:
-	</div>
-	<div class="col-md-9"  role="main">
-		
-
-		<div class="btn-group">
-		  <button type="button" class="btn btn-default">Left</button>
-		  <button type="button" class="btn btn-default">Middle</button>
-		  <button type="button" class="btn btn-default">Right</button>
-		</div>
-
-
-	</div>
-	</div>
-	<div style="height:30px">
-    <div class="col-md-3">
-		Region:
-	</div>
-	<div class="col-md-9"  role="main">
-		main2
-	</div>
-	</div>
-  </div>
-</div>
-
-
-
-
-<table class="table table-bordered" id="serverlist">
-        <thead>
-          <tr><!--style="background-color:#DDBB44; color:#FFFFFF">-->
-<!--             
-			<th class="col-lg-1">Product</th>
-            <th class="col-lg-2">Server Name</th>
-            <th class="col-lg-1">Type</th>
-            <th class="col-lg-2">OS</th>
-            <th class="col-lg-1">SMF</th>
-            <th class="col-lg-2">APP</th>
-            <th class="col-lg-1">Manifest</th>
-            <th class="col-lg-1">Label</th> 
--->
-			<th class="col-lg-1">Product</th>
-			<th class="col-lg-1">Region</th>
-            <th class="col-lg-2">Server Name</th>
-            <th class="col-lg-2">Host IP</th>
-			<th class="col-lg-1">User</th>
-			<th class="col-lg-1">Password</th>
-			<th class="col-lg-2">Create On</th>
-			<th class="col-lg-2">Update On</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-        
-<!--
-<ul class="pager">
-  <li><a href="#">Previous</a></li>
-  <li><a href="#">Next</a></li>
-</ul>-->
-<button type="button" class="btn btn-primary" id="search">Seach</button>
+                <button type="button" class="btn btn-primary" id="search">Seach</button>
 
             </div>
         </div>
         <!-- Site footer -->
         <div>
-            <p style="text-align:center;">
-                &copy; ThomsonReuters 2013</p>
+            <p style="text-align: center;">
+                &copy; ThomsonReuters 2013
+            </p>
         </div>
     </div>
     <!-- /container -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <!--    <script src="js/jquery-1.10.2.js"></script>
-    <script src="js/bootstrap.js"></script>-->
- <!--    -->
-    <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.2/js/bootstrap.min.js"></script>
-    <script src="http://cdn.bootcss.com/holder/2.0/holder.min.js"></script>
-    <script src="http://cdn.bootcss.com/highlight.js/7.3/highlight.min.js"></script>
+    <!--    -->
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <!--     <script src="http://cdn.bootcss.com/holder/2.0/holder.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/7.3/highlight.min.js"></script> -->
     <script type="text/javascript">
-		var $allhosts;
+        var allhosts, allregions, allproducts;
+        var init_disp_product = 12, init_disp_region = 4;
+        
         $(document).ready(function () {
+            // retrieve hosts, regions, products
+            $.post("./gethostlist.php", null, function (data) {
+                var dataObj = eval("(" + data + ")");
+                allhosts = dataObj["host"];
+                allregions = dataObj["region"];
+                allproducts = dataObj["product"];
+                // render hosts
+                $(eval(allhosts)).each(function (index) {
+                    if (index % 2 == 0)
+                        $("#serverlist tbody").append("<tr style='background-color:#ccc'><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
+                    else
+                        $("#serverlist tbody").append("<tr><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
+                });
+                // render regions
+                $(eval(allregions)).each(function (index) {
+                    if (index >= init_disp_region)
+                        $("#regionlist").append("<div class='a-element' style='display:none'><a href=#>" + this + "</a></div>");
+                    else
+                        $("#regionlist").append("<div class='a-element'><a href=#>" + this + "</a></div>");
+                });
+                if (eval(allregions).length <= init_disp_region) {
+                    $("#regionlist .o-more").css("display", "none");
+                }
+                
+                // render product
+                $(eval(allproducts)).each(function (index) {
+                    if (index >= init_disp_product)
+                        $("#productlist").append("<div class='a-element' style='display:none'><a href=#>" + this + "</a></div>");
+                    else
+                        $("#productlist").append("<div class='a-element'><a href=#>" + this + "</a></div>");
+                });
+                if (eval(allproducts).length <= init_disp_product) {
+                    $("#productlist .o-more").css("display", "none");
+                }
+                
+            });
+
+
+            $("#productlist .o-more").click(function (hanlder) {
+                var content = this.innerText.toLowerCase();
+                if (content.indexOf("more") >= 0) {
+                    // show more
+                    $("#productlist .o-more").html("Fold<span class='glyphicon glyphicon-chevron-up'></span>");
+                    $("#productlist .a-element").each(function () { $(this).css("display", "block"); });
+                }
+                else if (content.indexOf("fold") >= 0) {
+                    // fold up
+                    $("#productlist .o-more").html("More<span class='glyphicon glyphicon-chevron-down'></span>");
+                    $("#productlist .a-element").each(function (index) {
+                        if (index >= init_disp_product)
+                            $(this).css("display", "none");
+                    });
+                }
+            });
+
+            $("#regionlist .o-more").click(function (hanlder) {
+                var content = this.innerText.toLowerCase();
+                if (content.indexOf("more") >= 0) {
+                    // show more
+                    $("#regionlist .o-more").html("Fold<span class='glyphicon glyphicon-chevron-up'></span>");
+                    $("#regionlist .a-element").each(function () { $(this).css("display", "block"); });
+                }
+                else if (content.indexOf("fold") >= 0) {
+                    // fold up
+                    $("#regionlist .o-more").html("More<span class='glyphicon glyphicon-chevron-down'></span>");
+                    $("#regionlist .a-element").each(function (index) {
+                        if (index >= init_disp_region)
+                            $(this).css("display", "none");
+                    });
+                }
+            });
+
+            $("#regionlist").delegate(".a-element a", "click", function (data) {
+                //event.returnValue = false;
+                //event.preventDefault();
+                $.post("./searchhost.php", { region: this.innerText }, RenderHost);
+            });
+
+            $("#productlist").delegate(".a-element a", "click", function (data) {
+                //event.returnValue = false;
+                //event.preventDefault();
+                $.post("./searchhost.php", { product: this.innerText }, RenderHost);
+            });
+
+
+            //$("#regionlist .a-element").bind("click", function () {
+            //    //$.get("./searchhost.php", { region: this.innerText }, function (data) {
+            //    //    $("#serverlist tbody").html(data);
+
+            //    //});
+            //    alert(this.innerText);
+            //});
+
             $("tbody tr:odd").css("background-color", "#ccc");
             $("#search").click(function () {
                 GetDefaultHostList();
             });
-			
-			
         });
-
         function GetDefaultHostList() {
             $("#serverlist tbody").html("");
             $.post("./gethostlist.php", null, function (data) {
@@ -200,17 +319,25 @@
                 //for (var i = 0; i < data.length; i++) {
                 //    $("#serverlist tbody").append("<tr><td>" + data[i][0] + "</td><td>" + data[i][1] + "</td><td>" + data[i][2] + "</td><td>" + data[i][3] + "</td><td>" + data[i][4] + "</td><td>" + data[i][5] + "</td><td>" + data[i][6] + "</td><td>" + data[i][7] + "</td></tr>");
                 //}
-				$allhosts = data;
-				var dataObj=eval("("+data+")");
+                $allhosts = data;
+                var dataObj = eval("(" + data + ")");
                 $(eval(dataObj["host"])).each(function (index) {
-					if (index % 2 == 0)
-						$("#serverlist tbody").append("<tr style='background-color:#ccc'><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
-					else
-						$("#serverlist tbody").append("<tr><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
+                    if (index % 2 == 0)
+                        $("#serverlist tbody").append("<tr style='background-color:#ccc'><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
+                    else
+                        $("#serverlist tbody").append("<tr><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
                 });
             });
         }
-		
+        function RenderHost(data) {
+            $("#serverlist tbody").html("");
+            $(eval(data)).each(function (index) {
+                if (index % 2 == 0)
+                    $("#serverlist tbody").append("<tr style='background-color:#ccc'><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
+                else
+                    $("#serverlist tbody").append("<tr><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
+            });
+        }
     </script>
 </body>
 </html>
