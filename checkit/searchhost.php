@@ -16,7 +16,7 @@
 		$regionsql = " JOIN Region r on h.regionid = r.id";
 		if (isset($regionfilter) && count($regionfilter) > 0){
 			$regionsql .= " and r.Name in(";
-			for ($i = 1; $i < count($regionfilter) - 1; $i++){
+			for ($i = 0; $i < count($regionfilter) - 1; $i++){
 				$regionsql .= "'".$regionfilter[$i]."', ";
 			}
 			$regionsql .= "'".$regionfilter[count($regionfilter) - 1]."')";
@@ -25,7 +25,7 @@
 		$productsql = " JOIN Component c on h.componentid = c.id";
 		if (isset($productfilter) && count($productfilter) > 0){
 			$productsql .= " and c.Name in(";
-			for ($i = 1; $i < count($productfilter) - 1; $i++){
+			for ($i = 0; $i < count($productfilter) - 1; $i++){
 				$productsql .= "'".$productfilter[$i]."', ";
 			}
 			$productsql .= "'".$productfilter[count($productfilter) - 1]."')";

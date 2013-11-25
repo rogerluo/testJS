@@ -46,30 +46,31 @@
                 height: 20px;
             }
 
-            .a-value > .a-element + .v-select {
-                width: 120px;
+            .a-value > .a-selected {
+                width: auto;
                 float: left;
                 display: block;
                 overflow: hidden;
-                padding-top: 5px;
                 height: 20px;
-            border-top-color: #f00;
-            border-top-style: solid;
-            border-top-width: 1px;
-        }
+                border: 1px solid #E6E6E6;
+                position: relative;
+                padding: 0 20px 0 5px;
+                margin-right: 15px;
+                margin-bottom: 2px;
+            }
+
         .font-selected {
-            font-weight:bold;
-            color:#f00;
+            color: #f00;
         }
 
-            .a-value > .a-option {
-                position: absolute;
-                right: 10px;
-                top: 0px;
-                width: 140px;
-                height: 20px;
-                padding-top: 2px;
-            }
+        .a-value > .a-option {
+            position: absolute;
+            right: 10px;
+            top: 0px;
+            width: 140px;
+            height: 20px;
+            padding-top: 2px;
+        }
 
         .o-more {
             float: left;
@@ -99,7 +100,42 @@
             font-weight: bold;
         }
 
-        
+        .a-list a {
+            float: left;
+            padding-left: 18px;
+            background: url(image/icons.png) no-repeat -70px 1px;
+            color: #005AA0;
+        }
+
+            .a-list a:hover {
+                background: url(image/hover.png) no-repeat 0 1px;
+                color: #E4393C;
+            }
+
+        .selected a, .selected a:hover {
+            background: url(image/icons.png) no-repeat -70px -13px;
+            color: #E4393C;
+        }
+
+        .selected {
+            /*nothing to do, just as a type*/
+        }
+
+        .a-btns {
+            display: none;
+            padding: 10px 0;
+            text-align: center;
+            width: 100%;
+            float: left;
+        }
+
+        .a-selected-list {
+            display: none;
+            padding: 10px 0;
+            text-align: left;
+            width: 100%;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -139,11 +175,10 @@
                         </h3>
                     </div>
                     <!-- selected filter -->
-                    <div id="selected" class="panel-body" style="display:none">
+                    <div id="selected" class="panel-body" style="display: none">
                         <div>
                             <div class="a-key">Selected:</div>
                             <div id="Div1" class="a-value">
-                                
                             </div>
                         </div>
                     </div>
@@ -158,6 +193,7 @@
                                     </div>
                                     <div class="o-multiple">Multi&nbsp;<span class="glyphicon glyphicon-plus-sign"></span></div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -256,7 +292,9 @@
                 if (eval(allregions).length <= init_disp_region) {
                     $("#regionlist .o-more").css("display", "none");
                 }
-                
+
+                $("#regionlist").append("<div class='a-btns'><button type='button' class='btn btn-danger btn-sm disabled' style='margin-right: 10px;'>OK</button><button type='button' class='btn btn-default btn-sm'>Cancel</button></div>");
+
                 // render product
                 $(eval(allproducts)).each(function (index) {
                     if (index >= init_disp_product)
@@ -267,7 +305,8 @@
                 if (eval(allproducts).length <= init_disp_product) {
                     $("#productlist .o-more").css("display", "none");
                 }
-                
+
+                $("#productlist").append("<div class='a-btns'><button type='button' class='btn btn-danger btn-sm disabled' style='margin-right: 10px;'>OK</button><button type='button' class='btn btn-default btn-sm'>Cancel</button></div>");
             });
 
 
@@ -305,10 +344,47 @@
                 }
             });
 
+            $("#productlist .o-multiple").click(function () {
+                selected.IsMultiChoise4Product = true;
+                $("#productlist .a-option").css("display", "none");
+                $("#productlist .a-element").each(function () {
+                    $(this).css("display", "block");
+                    $(this).addClass("a-list");
+                });
+                $("#productlist .a-btns").css("display", "block");
+            });
+
+            $("#regionlist .o-multiple").click(function () {
+                selected.IsMultiChoise4Region = true;
+                $("#regionlist .a-option").css("display", "none");
+                $("#regionlist .a-element").each(function () {
+                    $(this).css("display", "block");
+                    $(this).addClass("a-list");
+                });
+                $("#regionlist .a-btns").css("display", "block");
+            });
+
             $("#regionlist").delegate(".a-element a", "click", function (data) {
                 //event.returnValue = false;
                 event.preventDefault();
-                if (selected.IsMultiChoise4Region) return;
+                if (selected.IsMultiChoise4Region) {
+                    if ($(this).parent("div").hasClass("selected")) {
+                        $(this).parent("div").removeClass("selected");
+                        var hasSelected = false;
+                        $("#regionlist .a-element").each(function () {
+                            if ($(this).hasClass("selected")) {
+                                hasSelected = true;
+                                return false;
+                            }
+                        });
+                        if (!hasSelected) $("#regionlist .btn-danger").addClass("disabled");
+                    } else {
+                        $(this).parent("div").addClass("selected");
+                        $("#regionlist .btn-danger").removeClass("disabled");
+                    }
+
+                    return;
+                }
                 selected.Regions[0] = this.innerText;
                 SearchHost();
             });
@@ -316,7 +392,24 @@
             $("#productlist").delegate(".a-element a", "click", function (data) {
                 //event.returnValue = false;
                 event.preventDefault();
-                if (selected.IsMultiChoise4Product) return;
+                if (selected.IsMultiChoise4Product) {
+                    if ($(this).parent("div").hasClass("selected")) {
+                        $(this).parent("div").removeClass("selected");
+                        var hasSelected = false;
+                        $("#productlist .a-element").each(function () {
+                            if ($(this).hasClass("selected")) {
+                                hasSelected = true;
+                                return false;
+                            }
+                        });
+                        if (!hasSelected) $("#productlist .btn-danger").addClass("disabled");
+
+                    } else {
+                        $(this).parent("div").addClass("selected");
+                        $("#productlist .btn-danger").removeClass("disabled");
+                    }
+                    return;
+                }
                 selected.Products[0] = this.innerText;
                 SearchHost();
             });
@@ -332,6 +425,69 @@
                 SearchHost();
             });
 
+            $("#regionlist").delegate(".btn-default", "click", function () {
+                selected.Regions = [];
+                DisableMultiChoise4Region();
+            });
+
+            $("#regionlist").delegate(".btn-danger", "click", function () {
+                selected.Regions = [];
+                $("#regionlist .a-element").each(function () {
+                    if ($(this).hasClass("selected")) {
+                        var val = $(this).find("a")[0].innerText;
+                        if (val) selected.Regions.push(val);
+                    }
+                });
+                DisableMultiChoise4Region();
+                SearchHost();
+            });
+
+            function DisableMultiChoise4Region() {
+                selected.IsMultiChoise4Region = false;
+                $("#regionlist .a-option").css("display", "block");
+                $("#regionlist .a-element").each(function (index) {
+                    $(this).removeClass("a-list");
+                    $(this).removeClass("selected");
+                    if (index >= init_disp_region) {
+                        $(this).css("display", "none");
+                    }
+                });
+                $("#regionlist .a-btns").css("display", "none");
+                $("#regionlist .btn-danger").addClass("disabled");
+            }
+
+
+
+            $("#productlist").delegate(".btn-default", "click", function () {
+                selected.Products = [];
+                DisableMultiChoise4Product();
+            });
+
+            $("#productlist").delegate(".btn-danger", "click", function () {
+                selected.Products = [];
+                $("#productlist .a-element").each(function () {
+                    if ($(this).hasClass("selected")) {
+                        var val = $(this).find("a")[0].innerText;
+                        if (val) selected.Products.push(val);
+                    }
+                });
+                DisableMultiChoise4Product();
+                SearchHost();
+            });
+
+            function DisableMultiChoise4Product() {
+                selected.IsMultiChoise4Product = false;
+                $("#productlist .a-option").css("display", "block");
+                $("#productlist .a-element").each(function (index) {
+                    $(this).removeClass("a-list");
+                    $(this).removeClass("selected");
+                    if (index >= init_disp_region) {
+                        $(this).css("display", "none");
+                    }
+                });
+                $("#productlist .a-btns").css("display", "none");
+                $("#productlist .btn-danger").addClass("disabled");
+            }
 
             //$("#regionlist .a-element").bind("click", function () {
             //    //$.get("./searchhost.php", { region: this.innerText }, function (data) {
@@ -374,20 +530,20 @@
                 $("#selected").css("display", "block");
                 $("#selected .a-value").html("");
                 if (selected.Products.length > 0) {
-                    var innerHtml = "<div class='v-element v-selected'>Product:";
+                    var innerHtml = "<div class='a-selected'>Product:";
                     for (var i = 0; i < selected.Products.length - 1; i++) {
-                        innerHtml += "<span class='font-selected'>"+selected.Products[i]+",</span>";
+                        innerHtml += "<strong class='font-selected'>" + selected.Products[i] + ",</strong>";
                     }
-                    innerHtml += selected.Products[selected.Products.length - 1] + "<a href=#><span class='glyphicon glyphicon-remove' attr='product'></span></a></div>";
+                    innerHtml += "<strong class='font-selected'>" + selected.Products[selected.Products.length - 1] + "</strong>&nbsp;<a href=#><span class='glyphicon glyphicon-remove' attr='product'></span></a></div>";
                     $("#selected .a-value").append(innerHtml);
                 }
 
                 if (selected.Regions.length > 0) {
-                    var innerHtml = "<div class='v-element v-selected'>Region:";
+                    var innerHtml = "<div class='a-selected'>Region:";
                     for (var i = 0; i < selected.Regions.length - 1; i++) {
-                        innerHtml += "<span class='font-selected'>" + selected.Products[i] + ",</span>";
+                        innerHtml += "<strong class='font-selected'>" + selected.Regions[i] + ",</strong>";
                     }
-                    innerHtml += selected.Regions[selected.Regions.length - 1] + "<a href=#><span class='glyphicon glyphicon-remove' attr='region'></span></a></div>";
+                    innerHtml += "<strong class='font-selected'>" + selected.Regions[selected.Regions.length - 1] + "</strong>&nbsp;<a href=#><span class='glyphicon glyphicon-remove' attr='region'></span></a></div>";
                     $("#selected .a-value").append(innerHtml);
                 }
             }
@@ -395,7 +551,7 @@
                 $("#selected").css("display", "none");
 
             $("#serverlist tbody").html("");
-            
+            //$("#serverlist tbody").html(data);
             $(eval(data)).each(function (index) {
                 if (index % 2 == 0)
                     $("#serverlist tbody").append("<tr style='background-color:#ccc'><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
@@ -403,6 +559,8 @@
                     $("#serverlist tbody").append("<tr><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
             });
         }
+
+
     </script>
 </body>
 </html>
