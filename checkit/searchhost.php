@@ -32,6 +32,13 @@
 		}
 		
 		$searchsql = "select c.name as Product, r.Name as Region, h.Name as ServerName, h.IP, h.User, h.Password, h.CreateDate, h.UPdatedate from Host h ".$productsql.$regionsql;
+		
+		if (isset($_POST['orderby']) &&!empty($_POST['orderby'])) {
+			if (isset($_POST['orderasc']) && $_POST['orderasc'] == "false")
+				$searchsql .= " Order by ".$_POST['orderby']." desc";
+			else
+				$searchsql .= " Order by ".$_POST['orderby']." asc";
+		}
 		$rs = mysql_query($searchsql, $conn);
 		$hosts = array();
 		if (!$rs) $hostresult = '<tr><td colspan=8>Could not execute query:' . mysql_error() .'</td></tr>';

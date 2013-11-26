@@ -219,14 +219,14 @@
                 <table class="table table-bordered" id="serverlist">
                     <thead>
                         <tr>
-                            <th class="col-lg-1">Product</th>
-                            <th class="col-lg-1">Region</th>
-                            <th class="col-lg-2">Server Name</th>
-                            <th class="col-lg-2">Host IP</th>
-                            <th class="col-lg-1">User</th>
-                            <th class="col-lg-1">Password</th>
-                            <th class="col-lg-2">Create On</th>
-                            <th class="col-lg-2">Update On</th>
+                            <th style="width:auto;" alias="Product">Product</th>
+                            <th style="width:auto;" alias="Region">Region</th>
+                            <th style="width:auto;" alias="ServerName">Server Name</th>
+                            <th style="width:auto;" alias="IP">Host IP</th>
+                            <th style="width:auto;" alias="User">User</th>
+                            <th style="width:auto;" alias="Password">Password</th>
+                            <th style="width:auto;" alias="CreateDate">Create On</th>
+                            <th style="width:auto;" alias="UPdatedate">Update On</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -268,6 +268,7 @@
             selected.Products = new Array();
             selected.Regions = new Array();
             selected.OrderBy = "";
+			selected.OrderAsc = true;
 
             // retrieve hosts, regions, products
             $.post("./gethostlist.php", null, function (data) {
@@ -456,8 +457,6 @@
                 $("#regionlist .btn-danger").addClass("disabled");
             }
 
-
-
             $("#productlist").delegate(".btn-default", "click", function () {
                 selected.Products = [];
                 DisableMultiChoise4Product();
@@ -488,6 +487,22 @@
                 $("#productlist .a-btns").css("display", "none");
                 $("#productlist .btn-danger").addClass("disabled");
             }
+
+            $("#serverlist th").click(function () {
+				if ($(this).attr("alias")){
+					selected.OrderBy = $(this).attr("alias");
+					selected.OrderAsc = !selected.OrderAsc;
+					
+					$("#serverlist th span").each(function(){
+						$(this).remove();
+					});
+					if (selected.OrderAsc)
+						$(this).append("<span class='glyphicon glyphicon-arrow-up'></span>");
+					else
+						$(this).append("<span class='glyphicon glyphicon-arrow-down'></span>");
+				}
+				SearchHost();
+            });
 
             //$("#regionlist .a-element").bind("click", function () {
             //    //$.get("./searchhost.php", { region: this.innerText }, function (data) {
@@ -521,7 +536,7 @@
         }
 
         function SearchHost() {
-            $.post("./searchhost.php", { region: selected.Regions.join("|"), product: selected.Products.join("|") }, RenderHost);
+            $.post("./searchhost.php", { region: selected.Regions.join("|"), product: selected.Products.join("|"), orderby: selected.OrderBy, orderasc: selected.OrderAsc }, RenderHost);
         }
 
         function RenderHost(data) {
@@ -558,6 +573,7 @@
                 else
                     $("#serverlist tbody").append("<tr><td>" + this[0] + "</td><td>" + this[1] + "</td><td>" + this[2] + "</td><td>" + this[3] + "</td><td>" + this[4] + "</td><td>" + this[5] + "</td><td>" + this[6] + "</td><td>" + this[7] + "</td></tr>");
             });
+			
         }
 
 
