@@ -52,41 +52,13 @@
      </ul>
      <li><a href="#">Log Check</a> </li>
 </ul>
-
-
-<!--                <div class="nav side-menu">
-                    <div>
-                        <ul class="menu-first" style="display: block;">
-                            <li><a href="#">System Information</a> </li>
-                            <li><a href="#">Function</a>
-                                <ul class="menu-second" style="display:none;">
-                                    <li><a href="#">RIC Check</a> </li>
-                                    <li><a href="#">DTS Check</a> </li>
-                                </ul>
-                            </li>
-                            <li><a href="#">Log Check</a> </li>
-                        </ul>
-                    </div>
-                </div>-->
             </div>
             <div class="col-md-9" role="main">
                 
-<!--
-<ul class="pagination pagination-lg">
-  <li class="disabled"><a href="#">&laquo;</a></li>
-  <li class="active"><a href="#">1</a></li>
-  <li><a href="#">2</a></li>
-  <li><a href="#">3</a></li>
-  <li><a href="#">4</a></li>
-  <li><a href="#">5</a></li>
-  <li><a href="#">&raquo;</a></li>
-</ul>
--->
-
 <form class="form-inline" role="form">
 <table>
 <tbody>
-<tr><td><label>RIC</label>&nbsp;&nbsp;</td><td><input type="text" class="form-control" id="exampleInputEmail1" placeholder="EUR=" /></td><td>&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Seach</button></td></tr>
+<tr><td><label>RIC</label>&nbsp;&nbsp;</td><td><input type="text" class="form-control" id="exampleInputEmail1" placeholder="EUR=" /></td><td>&nbsp;&nbsp;<button type="submit" class="btn btn-primary" id="search">Seach</button></td></tr>
 
 </tbody>
  
@@ -94,129 +66,18 @@
   </table>
 </form>
 
-<table class="table table-bordered">
+<table class="table table-bordered" id="fidlist">
         <thead>
           <tr><!--style="background-color:#DDBB44; color:#FFFFFF">-->
-            <th class="col-lg-1">Field</th>
-            <th class="col-lg-3">MCU</th>
-            <th class="col-lg-3">ADH</th>
-            <th class="col-lg-3">EED</th>
+            <th>FID</th>
+			<th>ACRONYM</th>
+            <th>MCU</th>
+            <th>ADH</th>
+            <th>EED</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>PROD_PERM</td>
-            <td>213</td>
-            <td>213</td>
-            <td>213</td>
-          </tr>
-      
-
-          <tr>
-            <td>RDNDISPLAY</td>
-            <td>153</td>
-            <td>153</td>
-            <td>153</td>
-          </tr>
-          
-          <tr class="danger">
-            <td>DSPLY_NAME</td>
-            <td>Commerzbank  FFT</td>
-            <td>Commerzbank  FFT</td>
-            <td>DANSKE BANK  COP</td>
-          </tr>
-
-          <tr>
-            <td>RDN_EXCHID</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-          </tr>
-
-          <tr>
-            <td>NETCHNG_1</td>
-            <td>-13</td>
-            <td>-13</td>
-            <td>-13</td>
-          </tr>
-
-          <tr>
-            <td>CURRENCY</td>
-            <td>840</td>
-            <td>840</td>
-            <td>840</td>
-          </tr>
-
-          <tr>
-            <td>BID</td>
-            <td>13393</td>
-            <td>13393</td>
-            <td>13393</td>
-          </tr>
-
-          <tr>
-            <td>BID_1</td>
-            <td>13394</td>
-            <td>13394</td>
-	    <td>13394</td>
-          </tr>
-
-          <tr>
-            <td>BID_2</td>
-            <td>13393</td>
-            <td>13393</td>
-            <td>13393</td>
-          </tr>
-
-          <tr>
-            <td>ASK</td>
-            <td>13395</td>
-            <td>13395</td>
-            <td>13395</td>
-          </tr>
-
-          <tr>
-            <td>ASK_1</td>
-            <td>13395</td>
-            <td>13395</td>
-            <td>13395</td>
-          </tr>
-
-          <tr>
-            <td>ASK_2</td>
-            <td>13395</td>
-            <td>13395</td>
-            <td>13395</td>
-          </tr>
-
-          <tr>
-            <td>BID_HIGH_1</td>
-            <td>13413</td>
-            <td>13413</td>
-            <td>13413</td>
-          </tr>
-
-          <tr>
-            <td>BID_LOW_1</td>
-            <td>13388</td>
-            <td>13388</td>
-            <td>13388</td>
-          </tr>
-
-          <tr>
-            <td>YRBIDHIGH</td>
-            <td>13832</td>
-            <td>13832</td>
-            <td>13832</td>
-          </tr>
-
-	  <tr>
-            <td>YRBIDLOW</td>
-            <td>13416</td>
-            <td>13416</td>
-            <td>13416</td>
-          </tr
-
+ 
         </tbody>
       </table>
 
@@ -245,8 +106,27 @@
     <script src="http://cdn.bootcss.com/highlight.js/7.3/highlight.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+			function RenderFidList(data){
+				//$("#fidlist tbody").html("");
+			}
+		
             $("tbody tr:odd").css("background-color", "#ccc");
+			
+			// retrieve the ric dump and render them
+			$("#search").click(function(){
+				event.preventDefault();
+				// step 1 retrieve the value
+				// todo
+				// step 2 render the ric dumps
+				$("#fidlist tbody").html("");
+				$.post("./getfidlist.php", {mcu:'./data/mcu_ric.dump', adh:'./data/adh_ric.dump', eed:'./data/eed_ric.dump'}, function(data){
+					$("#fidlist tbody").html(data);
+				});
+				
+			});
+			
         });
+		
     </script>
 </body>
 </html>
