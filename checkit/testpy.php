@@ -1,5 +1,5 @@
 <?php
-	$mcudump = "./data/mcu_RIC.dump";
+	$mcudump = "./data/adh_ric.dump";
 	$cmd = "python convert.py ".$mcudump;
 	$ret = 0;
 	$fids = array();

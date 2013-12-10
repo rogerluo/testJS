@@ -2,7 +2,7 @@
 	function DBConnect() {
 		$dbhost = "localhost";
 		$dbuser = "root";
-		$dbpwd 	= "intel@123";
+		$dbpwd 	= "";
 		$dbinst = "checkit";
 		$conn = mysql_connect($dbhost, $dbuser, $dbpwd);
 		$result = "";

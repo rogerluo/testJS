@@ -1,18 +1,18 @@
 <?php
 	require_once("getrecordtemplate.php");
 	global $RTs;
-	// $mcudump = "./data/MCU_RIC.dump";
-	// $adhdump = "./data/adh_RIC.dump";
-	// $eeddump = "./data/eed_RIC.dump";
-	if (isset($_POST['mcu']) && !empty($_POST['mcu'])){
-		$mcudump=$_POST['mcu'];
-	}
-	if (isset($_POST['adh']) && !empty($_POST['adh'])){
-		$adhdump=$_POST['adh'];
-	}
-	if (isset($_POST['eed']) && !empty($_POST['eed'])){
-		$eeddump=$_POST['eed'];
-	}
+	$mcudump = "./data/mcu_ric.dump";
+	$adhdump = "./data/adh_ric.dump";
+	$eeddump = "./data/eed_ric.dump";
+	// if (isset($_POST['mcu']) && !empty($_POST['mcu'])){
+		// $mcudump=$_POST['mcu'];
+	// }
+	// if (isset($_POST['adh']) && !empty($_POST['adh'])){
+		// $adhdump=$_POST['adh'];
+	// }
+	// if (isset($_POST['eed']) && !empty($_POST['eed'])){
+		// $eeddump=$_POST['eed'];
+	// }
 	$mcuout = array();
 	$adhout = array();
 	$eedout = array();
@@ -93,59 +93,60 @@
 			}
 		}
 		
-		// foreach (array_keys($adhfids) as $adhkey){
-			// if (array_key_exists($adhkey, $alls)){
-				// continue;
-			// }
-			// $tmp = "<td>".$adhkey."</td>";
-			// if (array_key_exists($adhkey, $RTs)){
-				// $tmp.="<td>".$RTs[$adhkey]."</td>";
-			// }
-			// else{
-				// $tmp.="<td>UnKnown</td>";
-			// }
-			// // show mcu value
-			// $tmp.="<td>Miss</td>";
-			// // show adh value
-			// $tmp.="<td>".$adhfids[$adhkey]."</td>";
-			// // show eed value
-			// if (array_key_exists($adhkey, $eedfids)) {
-				// if (strcasecmp($adhfids[$adhkey], $eedfids[$adhkey]) != 0){
-					// $isdiff = true;
-				// }
-				// $tmp.="<td>".$eedfids[$adhkey]."</td>";				
-			// }
-			// else {
-				// $isdiff = true;
-				// $tmp.="<td>Miss</td>";	
-			// }
-			// $alls[$adhkey]="<tr class='danger'>".$tmp."</tr>";
-		// }
+		foreach (array_keys($adhfids) as $adhkey){
+			if (array_key_exists($adhkey, $alls)){
+				continue;
+			}
+			$tmp = "<td>".$adhkey."</td>";
+			if (array_key_exists($adhkey, $rts)){
+				$tmp.="<td>".$rts[$adhkey]."</td>";
+			}
+			else{
+				$tmp.="<td>unknown</td>";
+			}
+			// show mcu value
+			$tmp.="<td>miss</td>";
+			// show adh value
+			$tmp.="<td>".$adhfids[$adhkey]."</td>";
+			// show eed value
+			if (array_key_exists($adhkey, $eedfids)) {
+				if (strcasecmp($adhfids[$adhkey], $eedfids[$adhkey]) != 0){
+					$isdiff = true;
+				}
+				$tmp.="<td>".$eedfids[$adhkey]."</td>";				
+			}
+			else {
+				$isdiff = true;
+				$tmp.="<td>miss</td>";	
+			}
+			$alls[$adhkey]="<tr class='danger'>".$tmp."</tr>";
+		}
 		
-		// foreach (array_keys($eedfids) as $eedkey){
-			// if (array_key_exists($eedkey, $alls)){
-				// continue;
-			// }
-			// $tmp = "<td>".$eedkey."</td>";
-			// if (array_key_exists($eedkey, $RTs)){
-				// $tmp.="<td>".$RTs[$eedkey]."</td>";
-			// }
-			// else{
-				// $tmp.="<td>UnKnown</td>";
-			// }
-			// // show mcu value
-			// $tmp.="<td>Miss</td>";
-			// // show adh value
-			// $tmp.="<td>Miss</td>";
-			// // show eed value
-			// $tmp.="<td>".$eedfids[$eedkey]."</td>";
-			// $alls[$eedkey]="<tr class='danger'>".$tmp."</tr>";
-		// }
+		foreach (array_keys($eedfids) as $eedkey){
+			if (array_key_exists($eedkey, $alls)){
+				continue;
+			}
+			$tmp = "<td>".$eedkey."</td>";
+			if (array_key_exists($eedkey, $rts)){
+				$tmp.="<td>".$rts[$eedkey]."</td>";
+			}
+			else{
+				$tmp.="<td>unknown</td>";
+			}
+			// show mcu value
+			$tmp.="<td>miss</td>";
+			// show adh value
+			$tmp.="<td>miss</td>";
+			// show eed value
+			$tmp.="<td>".$eedfids[$eedkey]."</td>";
+			$alls[$eedkey]="<tr class='danger'>".$tmp."</tr>";
+		}
 		// render the body for html
 		$tmp = "";
 		foreach ($alls as $fid)
 			$tmp .= $fid;
 		$result = $tmp;
+		//$result = "<tr><td colspan='5'>".count($mcufids).", ".count($adhfids).", ".count($eedfids)."</td></tr>";
 	}
 	else {
 		$result = "<tr><td colspan='5'>Failed to parse ";
