@@ -1,0 +1,57 @@
+#!/usr/bin/expect
+
+#Set variables
+set ipaddr [lrange $argv 0 0]
+set dir [lrange $argv 1 1]
+
+set password [lrange $argv 2 2]
+set user [lrange $argv 3 3]
+set targDir [lrange $argv 4 4]
+#set each command line waiting time as 20 seconds
+set timeout 150
+#Copy file from remote machine
+#spawn scp $user@10.40.250.46:c:/Users/Administrator/getfile .
+
+spawn ssh-keygen -R $ipaddr
+expect "*known_hosts*"
+
+spawn scp -p $user@$ipaddr:$dir $targDir
+
+set done 1
+while {$done} {
+expect {
+    "yes/no" {
+        send "yes\r"
+        exp_continue 
+    } "*assword:*"  {
+	send "$password\r"
+        exp_continue
+    } "*ast login:*" {
+        # .s1...u2/p2...
+        send "LANG=en_US.UTF-8\r"
+        expect "\$*"
+        send "su - $u2\r"
+        expect "*assword:*"
+        send "$p2\r"
+        interact
+        exit 0
+    } timeout {
+        send_user "#####Connection to $ipaddr timeout!#####\n"
+        exit 1
+    } "*ncorrect*" {
+        send_user "#####Password incorrect!#####\n"
+        exit 2
+    } "*ermission*" {  #for LINUX ssh
+        send_user "#####Password Error!#####\n"
+        exit 2
+    } eof {
+        exit 3
+    }
+}
+}
+#expect "*password:*"
+#send -- "$password\r"
+#send -- "\r"
+
+#End of copy file script
+expect eof

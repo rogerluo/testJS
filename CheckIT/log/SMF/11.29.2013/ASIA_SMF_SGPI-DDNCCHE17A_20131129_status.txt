@@ -1,0 +1,15 @@
+spawn ssh-keygen -R 10.40.246.72
+/root/.ssh/known_hosts updated.
+Original contents retained as /root/.ssh/known_hosts.old
+spawn scp -p reutadmin@10.40.246.72:D:/ThomsonReuters/SMF/log/smf*log*files.20131129* ../tmp/SMF
+The authenticity of host '10.40.246.72 (10.40.246.72)' can't be established.
+RSA key fingerprint is 1f:c7:2a:79:16:13:9b:25:6d:34:ea:ad:0f:ed:50:ad.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.40.246.72' (RSA) to the list of known hosts.
+reutadmin@10.40.246.72's password: 
+Permission denied, please try again.
+reutadmin@10.40.246.72's password: 
+Permission denied, please try again.
+reutadmin@10.40.246.72's password: 
+Permission denied (publickey,password,keyboard-interactive,hostbased).
+#####Password Error!#####

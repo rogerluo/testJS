@@ -1,0 +1,5 @@
+#!/bin/sh
+#Parameter IP Address needed input to delete the specific line which have saved target machine's publicj key
+
+sed -i "/$1/d" ~/.ssh/known_hosts
+echo "$1 have been delteted in file ~/.ssh/known_hosts"

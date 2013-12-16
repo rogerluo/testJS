@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="">
+    <title>CHECKIT</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap-theme.css" rel="stylesheet" />
+    <link href="/css/bootstrap.css" rel="stylesheet" />
+    <link href="/css/justified-nav.css" rel="stylesheet" />
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="text-muted">
+                CheckIT!</h3>
+            <ul class="nav nav-justified">
+                <li class="active"><a href="./index.htm">Home</a></li>
+                <li><a href="#">DIT</a></li>
+                <li><a href="#">SIT</a></li>
+                <li><a href="#">MORE</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="page-header">
+            <h1>RIC Check</h1>
+        </div>
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-md-3">
+                
+
+<ul class="nav nav-pills nav-stacked">
+   <li><a href="#">System Information</a> </li>
+    <li><a href="#">Data</a> </li>
+     <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;RIC Check</a> </li>
+        <li><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;DCS Check</a> </li>
+     </ul>
+     <li><a href="#">Log Check</a> </li>
+</ul>
+            </div>
+            <div class="col-md-9" role="main">
+                
+<form class="form-inline" role="form">
+<table>
+<tbody>
+<tr><td><label>RIC</label>&nbsp;&nbsp;</td><td><input type="text" class="form-control" id="exampleInputEmail1" placeholder="EUR=" /></td><td>&nbsp;&nbsp;<button type="submit" class="btn btn-primary" id="search">Seach</button></td></tr>
+
+</tbody>
+ 
+  
+  </table>
+</form>
+
+<table class="table table-bordered" id="fidlist">
+        <thead>
+          <tr><!--style="background-color:#DDBB44; color:#FFFFFF">-->
+            <th>FID</th>
+			<th>ACRONYM</th>
+            <th>MCU</th>
+            <th>ADH</th>
+            <th>EED</th>
+          </tr>
+        </thead>
+        <tbody>
+ 
+        </tbody>
+      </table>
+
+<!--
+<ul class="pager">
+  <li><a href="#">Previous</a></li>
+  <li><a href="#">Next</a></li>
+</ul>-->
+
+
+            </div>
+        </div>
+        <!-- Site footer -->
+        <div>
+            <p style="text-align:center;">
+                &copy; ThomsonReuters 2013</p>
+        </div>
+    </div>
+    <!-- /container -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.js"></script>-->
+    <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.2/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/holder/2.0/holder.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/7.3/highlight.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+			function RenderFidList(data){
+				//$("#fidlist tbody").html("");
+			}
+		
+            $("tbody tr:odd").css("background-color", "#ccc");
+			
+			// retrieve the ric dump and render them
+			$("#search").click(function(){
+				event.preventDefault();
+				// step 1 retrieve the value
+				// todo
+				// step 2 render the ric dumps
+				$("#fidlist tbody").html("");
+				$.post("/riccheck/getfidlist.php", {mcu:'../data/mcu_ric.dump', adh:'../data/adh_ric.dump', eed:'../data/eed_ric.dump'}, function(data){
+					$("#fidlist tbody").html(data);
+				});
+				
+			});
+			
+        });
+		
+    </script>
+</body>
+</html>
