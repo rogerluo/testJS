@@ -1,11 +1,6 @@
 <?php
-//List the configured public paramters here
-
-$LogType = array(
-        "smf"  => "SMF",
-        "che"  => "CHEDump",
-        "gmi"=> "GMI",
-        "mc"    => "MCData"
-);
-
+define("DBHST", "localhost");
+define("DBUSR", "root");
+define("DBPWD", "intel@123");
+define("DBIST", "checkit");
 ?>
