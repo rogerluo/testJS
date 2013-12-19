@@ -1,5 +1,5 @@
 <?php
-	$mcudump = "/root/checkit/data/adh_ric.dump";
+	$mcudump = "/root/checkit/data/EUR=/adh_ric.dump";
 	$cmd = "python convert.py ".$mcudump;
 	$ret = 0;
 	$fids = array();

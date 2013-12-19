@@ -50,103 +50,109 @@
 			$kv = (explode(",", $line));
 			$eedfids[intval($kv[0])] = $kv[1];
 		}
-		$alls = array();
-		foreach (array_keys($mcufids) as $mcukey){
-			$isdiff = false;
-			$tmp = "<td>".$mcukey."</td>";
-			if (array_key_exists($mcukey, $RTs)){
-				$tmp.="<td>".$RTs[$mcukey]."</td>";
-			}
-			else{
-				$tmp.="<td>UnKnown</td>";
-			}
-			// show mcu value
-			$tmp .= "<td>".$mcufids[$mcukey]."</td>";			
-			// show adh value
-			if (array_key_exists($mcukey, $adhfids)) {
-				if (strcasecmp($mcufids[$mcukey], $adhfids[$mcukey]) != 0){
-					$isdiff = true;
+		if (count($mcufids) == 0 &&
+			count($adhfids) == 0 &&
+			count($eedfids) == 0){
+			$result = "<tr><td colspan='5'>Nothing to find.</td></tr>";
+		}
+		else {
+			$alls = array();
+			foreach (array_keys($mcufids) as $mcukey){
+				$isdiff = false;
+				$tmp = "<td>".$mcukey."</td>";
+				if (array_key_exists($mcukey, $RTs)){
+					$tmp.="<td>".$RTs[$mcukey]."</td>";
 				}
-				$tmp.="<td>".$adhfids[$mcukey]."</td>";				
-			}
-			else {
-				$isdiff = true;
-				$tmp.="<td>Miss</td>";	
-			}
-			// show eed value
-			if (array_key_exists($mcukey, $eedfids)) {
-				if (strcasecmp($mcufids[$mcukey], $eedfids[$mcukey]) != 0){
-					$isdiff = true;
+				else{
+					$tmp.="<td>UnKnown</td>";
 				}
-				$tmp.="<td>".$eedfids[$mcukey]."</td>";				
-			}
-			else {
-				$isdiff = true;
-				$tmp.="<td>Miss</td>";	
+				// show mcu value
+				$tmp .= "<td>".$mcufids[$mcukey]."</td>";			
+				// show adh value
+				if (array_key_exists($mcukey, $adhfids)) {
+					if (strcasecmp($mcufids[$mcukey], $adhfids[$mcukey]) != 0){
+						$isdiff = true;
+					}
+					$tmp.="<td>".$adhfids[$mcukey]."</td>";				
+				}
+				else {
+					$isdiff = true;
+					$tmp.="<td>Miss</td>";	
+				}
+				// show eed value
+				if (array_key_exists($mcukey, $eedfids)) {
+					if (strcasecmp($mcufids[$mcukey], $eedfids[$mcukey]) != 0){
+						$isdiff = true;
+					}
+					$tmp.="<td>".$eedfids[$mcukey]."</td>";				
+				}
+				else {
+					$isdiff = true;
+					$tmp.="<td>Miss</td>";	
+				}
+				
+				if ($isdiff) {
+					$alls[$mcukey] = "<tr class='fiddiff'>".$tmp."</tr>";
+				}
+				else {
+					$alls[$mcukey] = "<tr>".$tmp."</tr>";
+				}
 			}
 			
-			if ($isdiff) {
-				$alls[$mcukey] = "<tr class='danger'>".$tmp."</tr>";
-			}
-			else {
-				$alls[$mcukey] = "<tr>".$tmp."</tr>";
-			}
-		}
-		
-		foreach (array_keys($adhfids) as $adhkey){
-			if (array_key_exists($adhkey, $alls)){
-				continue;
-			}
-			$tmp = "<td>".$adhkey."</td>";
-			if (array_key_exists($adhkey, $rts)){
-				$tmp.="<td>".$rts[$adhkey]."</td>";
-			}
-			else{
-				$tmp.="<td>unknown</td>";
-			}
-			// show mcu value
-			$tmp.="<td>miss</td>";
-			// show adh value
-			$tmp.="<td>".$adhfids[$adhkey]."</td>";
-			// show eed value
-			if (array_key_exists($adhkey, $eedfids)) {
-				if (strcasecmp($adhfids[$adhkey], $eedfids[$adhkey]) != 0){
-					$isdiff = true;
+			foreach (array_keys($adhfids) as $adhkey){
+				if (array_key_exists($adhkey, $alls)){
+					continue;
 				}
-				$tmp.="<td>".$eedfids[$adhkey]."</td>";				
+				$tmp = "<td>".$adhkey."</td>";
+				if (array_key_exists($adhkey, $rts)){
+					$tmp.="<td>".$rts[$adhkey]."</td>";
+				}
+				else{
+					$tmp.="<td>unknown</td>";
+				}
+				// show mcu value
+				$tmp.="<td>miss</td>";
+				// show adh value
+				$tmp.="<td>".$adhfids[$adhkey]."</td>";
+				// show eed value
+				if (array_key_exists($adhkey, $eedfids)) {
+					if (strcasecmp($adhfids[$adhkey], $eedfids[$adhkey]) != 0){
+						$isdiff = true;
+					}
+					$tmp.="<td>".$eedfids[$adhkey]."</td>";				
+				}
+				else {
+					$isdiff = true;
+					$tmp.="<td>miss</td>";	
+				}
+				$alls[$adhkey]="<tr class='fiddiff'>".$tmp."</tr>";
 			}
-			else {
-				$isdiff = true;
-				$tmp.="<td>miss</td>";	
+			
+			foreach (array_keys($eedfids) as $eedkey){
+				if (array_key_exists($eedkey, $alls)){
+					continue;
+				}
+				$tmp = "<td>".$eedkey."</td>";
+				if (array_key_exists($eedkey, $rts)){
+					$tmp.="<td>".$rts[$eedkey]."</td>";
+				}
+				else{
+					$tmp.="<td>unknown</td>";
+				}
+				// show mcu value
+				$tmp.="<td>miss</td>";
+				// show adh value
+				$tmp.="<td>miss</td>";
+				// show eed value
+				$tmp.="<td>".$eedfids[$eedkey]."</td>";
+				$alls[$eedkey]="<tr class='fiddiff'>".$tmp."</tr>";
 			}
-			$alls[$adhkey]="<tr class='danger'>".$tmp."</tr>";
+			// render the body for html
+			$tmp = "";
+			foreach ($alls as $fid)
+				$tmp .= $fid;
+			$result = $tmp;
 		}
-		
-		foreach (array_keys($eedfids) as $eedkey){
-			if (array_key_exists($eedkey, $alls)){
-				continue;
-			}
-			$tmp = "<td>".$eedkey."</td>";
-			if (array_key_exists($eedkey, $rts)){
-				$tmp.="<td>".$rts[$eedkey]."</td>";
-			}
-			else{
-				$tmp.="<td>unknown</td>";
-			}
-			// show mcu value
-			$tmp.="<td>miss</td>";
-			// show adh value
-			$tmp.="<td>miss</td>";
-			// show eed value
-			$tmp.="<td>".$eedfids[$eedkey]."</td>";
-			$alls[$eedkey]="<tr class='danger'>".$tmp."</tr>";
-		}
-		// render the body for html
-		$tmp = "";
-		foreach ($alls as $fid)
-			$tmp .= $fid;
-		$result = $tmp;
-		//$result = "<tr><td colspan='5'>".count($mcufids).", ".count($adhfids).", ".count($eedfids)."</td></tr>";
 	}
 	else {
 		$result = "<tr><td colspan='5'>Failed to parse ";

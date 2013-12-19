@@ -9,7 +9,7 @@ import datetime
 MCUlist={}
 ADHlist={}
 EEDlist={}
-
+TRWFlist={}     # [FIDID, FIDTYPE]
 
 # Read from TRWF2.DAT and generate dictionary: key as FID ID, value as FID name
 def DumpRT(file):
@@ -36,6 +36,18 @@ def DumpRT(file):
 	conn.commit()
 	conn.close()
 
+# Read from TRWF2.DAT, and save [FIDID,FIDTYPE] into dictionary
+def GenDictForTRWF(file):
+        FH = open(file)
+        try:
+                for line in FH.readlines():
+                        line = line.strip("\n")
+                        if re.match('^!', line) is None:
+                                r1 = re.compile('^(\S+)\s*".+"\s+(-?\d{1,5})\s+(\S+)\s+(\S+)\s+(\d{1,3})\s*')
+                                m = r1.match(line)
+                                TRWFlist[m.groups(0)[1]] = m.groups(0)[3]
+        finally:
+                FH.close()
 
 # Convert buff to string(remove (0x**))
 def BuffertoString(mbuffer):
@@ -46,11 +58,14 @@ def BuffertoString(mbuffer):
                 return mbuffer
 
 # Convert real/time to string
-def RealtoString(mreal,mtype):
-        if mtype == '10' or mtype == '12':
+def RealtoString(mreal,mtype,mfid):
+        if mtype == '10' or mtype == '11' or mtype == '12':
                 return float(mreal)/(10**(14-int(mtype)))
-        elif mtype == '0':  # Time in seconds
-                return time.strftime('%H:%M:%S',time.gmtime(int(mreal)))
+        elif mtype == '0':  
+                if TRWFlist[mfid] == 'REAL':
+                        return mreal # Real type, no need to convert
+                else:
+                        return time.strftime('%H:%M:%S',time.gmtime(int(mreal))) # Time in seconds
         elif mtype == '1':  # Time in miliseconds
                 mtimems = int(mreal)%1000
                 return time.strftime('%H:%M:%S',time.gmtime(int(int(mreal)/1000)))+'.'+str(mtimems)
@@ -67,7 +82,7 @@ def DatetoString(mon,day,year):
 # Get FID ID:FID value from MCU dump
 def CheckRIC_MCU(dbfile):
         # Define regex for MCU
-        r = re.compile('^#(\d{1,5})[^=]+=\s([^\(]+)\(.*')
+        r_mcu = re.compile('^#(\d{1,5})[^=]+=\s([^\(]+)\(.*') # Get FID and value before and after =
         
         FH = open(dbfile)
         try:
@@ -76,8 +91,20 @@ def CheckRIC_MCU(dbfile):
                         #line = line.lstrip('#')
 
                         if re.match('^#',line) is not None:
-                                m = r.match(line)
-                                MCUlist[m.groups(0)[0]] = m.groups(0)[1].strip()
+                                m_mcu = r_mcu.match(line)
+
+                                m_real0 = re.match('^(-?\d+)\.0+$',m_mcu.groups(0)[1].strip())  #  Trim 0 for int
+                                m_real = re.match('^(-?\d+\.0*[1-9]*)0*$',m_mcu.groups(0)[1].strip())  # Trim 0 for real
+                                m_time0 = re.match('^(\d{2}:\d{2}:\d{2})\.0*$',m_mcu.groups(0)[1].strip())  # Format as hh:mm:ss
+
+                                if m_real0 is not None:
+                                        MCUlist[m_mcu.groups(0)[0]] = m_real0.groups(0)[0]
+                                elif m_real is not None:
+                                        MCUlist[m_mcu.groups(0)[0]] = m_real.groups(0)[0]
+                                elif m_time0 is not None:
+                                        MCUlist[m_mcu.groups(0)[0]] = m_time0.groups(0)[0]
+                                else:
+                                        MCUlist[m_mcu.groups(0)[0]] = m_mcu.groups(0)[1].strip()
 
         finally:
                 FH.close()
@@ -85,7 +112,7 @@ def CheckRIC_MCU(dbfile):
 # Get FID ID:FID value from ADH dump
 def CheckRIC_ADH(dbfile):
         # Define regex for ADH
-        r = re.compile('^(\d{1,5})<[^>\)]+\)>(.*)')
+        r = re.compile('^(\d{1,5})<([^>\)]+)\)>(.*)')
         
         FH = open(dbfile)
         try:
@@ -94,32 +121,31 @@ def CheckRIC_ADH(dbfile):
 
                         if re.match('^\d{1,5}<',line) is not None:
                                 m = r.match(line)
-                                #print m.groups(0),'...'
+                                
                                 # Need to check the data type here
-                                m_uint = re.match('^\(\d{1,2}\)\s(.*)',m.groups(0)[1])
-                                m_buff = re.match('^\"([^\"]+)\"',m.groups(0)[1])
-                                m_real = re.match('^(\S+)\s\((\d{1,2})\)',m.groups(0)[1])
-                                m_date = re.match('^(\d{2})\/(\d{2})\/(\d{4})\s*',m.groups(0)[1])
+                                m_uint = re.match('^\(\d{1,2}\)\s(.*)',m.groups(0)[2])
+                                m_buff = re.match('^\"([^\"]+)\"',m.groups(0)[2])
+                                m_real = re.match('^(\S+)\s\((\d{1,2})\)',m.groups(0)[2])
+                                m_date = re.match('^(\d{2})\/(\d{2})\/(\d{4})\s*',m.groups(0)[2])
                                 
                                 if m_uint is not None:
                                         ADHlist[m.groups(0)[0]] = m_uint.groups(0)[0]
                                 elif m_buff is not None:
-                                        #ADHlist[m.groups(0)[0]] = m_buff.groups(0)[0]
                                         ADHlist[m.groups(0)[0]] = BuffertoString(m_buff.groups(0)[0])
                                 elif m_real is not None:
-                                        ADHlist[m.groups(0)[0]] = RealtoString(m_real.groups(0)[0],m_real.groups(0)[1])
+                                        ADHlist[m.groups(0)[0]] = RealtoString(m_real.groups(0)[0],m_real.groups(0)[1],m.groups(0)[0])
                                 elif m_date is not None:
                                         ADHlist[m.groups(0)[0]] = DatetoString(m_date.groups(0)[0],m_date.groups(0)[1],m_date.groups(0)[2])
                                 else:
                                         ADHlist[m.groups(0)[0]] = m_date.groups(0)[0]
 
         finally:
-                FH.close()        
+                FH.close()
 
 # Get FID ID:FID value from EED dump
 def CheckRIC_EED(dbfile):
         # Define regex for EED
-        r = re.compile('^(\d{1,5})<[^>\)]+\)>(.*)')
+        r = re.compile('^(\d{1,5})<([^>\)]+)\)>(.*)')
         
         FH = open(dbfile)
         try:
@@ -128,26 +154,26 @@ def CheckRIC_EED(dbfile):
 
                         if re.match('^\d{1,5}<',line) is not None:
                                 m = r.match(line)
-                                #print m.groups(0),'...'
+                                
                                 # Need to check the data type here
-                                m_uint = re.match('^\(\d{1,2}\)\s(.*)',m.groups(0)[1])
-                                m_buff = re.match('^\"([^\"]+)\"',m.groups(0)[1])
-                                m_real = re.match('^(\S+)\s\((\d{1,2})\)',m.groups(0)[1])
-                                m_date = re.match('^(\d{2})\/(\d{2})\/(\d{4})\s*',m.groups(0)[1])
+                                m_uint = re.match('^\(\d{1,2}\)\s(.*)',m.groups(0)[2])
+                                m_buff = re.match('^\"([^\"]+)\"',m.groups(0)[2])
+                                m_real = re.match('^(\S+)\s\((\d{1,2})\)',m.groups(0)[2])
+                                m_date = re.match('^(\d{2})\/(\d{2})\/(\d{4})\s*',m.groups(0)[2])
                                 
                                 if m_uint is not None:
                                         EEDlist[m.groups(0)[0]] = m_uint.groups(0)[0]
                                 elif m_buff is not None:
                                         EEDlist[m.groups(0)[0]] = BuffertoString(m_buff.groups(0)[0])
                                 elif m_real is not None:
-                                        EEDlist[m.groups(0)[0]] = RealtoString(m_real.groups(0)[0],m_real.groups(0)[1])
+                                        EEDlist[m.groups(0)[0]] = RealtoString(m_real.groups(0)[0],m_real.groups(0)[1],m.groups(0)[0])
                                 elif m_date is not None:
                                         EEDlist[m.groups(0)[0]] = DatetoString(m_date.groups(0)[0],m_date.groups(0)[1],m_date.groups(0)[2])
                                 else:
                                         EEDlist[m.groups(0)[0]] = m_date.groups(0)[0]
 
         finally:
-                FH.close()
+                FH.close() 
 
 
 def TestSingle(argvs):
@@ -160,6 +186,9 @@ def main(argvs):
 			print 'invalid arguments'
 			return
 		# DumpRT(r'./data/TRWF2.DAT')
+
+                # Generate FID<>TYPE mapping in memory
+                GenDictForTRWF(r'../data/TRWF2.DAT')
 		
 		# check which ricdump
 		lowricdump = argvs[1].lower()
@@ -201,3 +230,4 @@ def main(argvs):
 
 if __name__ == '__main__':
 	main(sys.argv)
+
